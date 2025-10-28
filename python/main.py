@@ -6,7 +6,6 @@ from time import sleep_ms
 
 import math
 
-
 MAIN_LOOP_DELAY     = 50
 LIGHTS_SWITCH_DELAY = 300
 
