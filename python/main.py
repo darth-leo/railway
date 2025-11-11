@@ -6,18 +6,18 @@ from time import sleep_ms
 
 import math
 
-MAIN_LOOP_DELAY     = 50
+MAIN_LOOP_DELAY     = 100
 LIGHTS_SWITCH_DELAY = 300
 
 STATE_CLOSED = 0
 STATE_OPENED = 1
 
-LOCK_BUTTON_PIN  = 0
-OPEN_BUTTON_PIN  = 1
-LOCK_SENSOR_PIN  = 2
-OPEN_SENSOR_PIN  = 3
-LIGHTS_PIN       = 6
-GATES_PIN        = 5
+LOCK_BUTTON_PIN  = 6
+OPEN_BUTTON_PIN  = 7
+LOCK_SENSOR_PIN  = 5
+OPEN_SENSOR_PIN  = 2
+LIGHTS_PIN       = 4
+GATES_PIN        = 0
 
 class Gates:
 
@@ -130,13 +130,13 @@ def main():
 
     while True:
             
-        if sensors.is_open_triggered() or control.is_open_clicked():
-        
+        if (sensors.is_open_triggered() or control.is_open_clicked()) and state != STATE_OPENED:
+            
             gates.open()
             lights.reset()
             state = STATE_OPENED
 
-        if sensors.is_lock_triggered() or control.is_lock_clicked():
+        if (sensors.is_lock_triggered() or control.is_lock_clicked())  and state != STATE_CLOSED:
 
             gates.lock()
             lights.reset()
