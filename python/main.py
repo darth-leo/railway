@@ -12,8 +12,6 @@ LIGHTS_SWITCH_DELAY = 300
 STATE_CLOSED = 0
 STATE_OPENED = 1
 
-LOCK_BUTTON_PIN  = 6
-OPEN_BUTTON_PIN  = 7
 LOCK_SENSOR_PIN  = 5
 OPEN_SENSOR_PIN  = 2
 LIGHTS_PIN       = 4
@@ -81,22 +79,6 @@ class Lights:
 
         self.counter = self.CNT_MAX
 
-class Control:
-
-    def __init__( self, open_pin, lock_pin ):
-
-        self.open = Pin(open_pin, Pin.IN, Pin.PULL_UP)
-        self.lock = Pin(lock_pin, Pin.IN, Pin.PULL_UP)
-
-    def is_open_clicked( self ):
-
-        return not bool(self.open.value())
-
-    def is_lock_clicked( self ):
-
-        return not bool(self.lock.value())
-
-
 class Sensors:
 
     def __init__( self, open_pin, lock_pin ):
@@ -116,8 +98,6 @@ def main():
 
     sensors = Sensors( OPEN_SENSOR_PIN, LOCK_SENSOR_PIN )
 
-    control = Control( OPEN_BUTTON_PIN, LOCK_BUTTON_PIN )
-
     lights = Lights(LIGHTS_PIN, LIGHTS_SWITCH_DELAY)
 
     gates = Gates( GATES_PIN )
@@ -130,13 +110,13 @@ def main():
 
     while True:
             
-        if (sensors.is_open_triggered() or control.is_open_clicked()) and state != STATE_OPENED:
+        if sensors.is_open_triggered() and state != STATE_OPENED:
             
             gates.open()
             lights.reset()
             state = STATE_OPENED
 
-        if (sensors.is_lock_triggered() or control.is_lock_clicked())  and state != STATE_CLOSED:
+        if sensors.is_lock_triggered() and state != STATE_CLOSED:
 
             gates.lock()
             lights.reset()
